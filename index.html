@@ -17,14 +17,12 @@
 <script src="build/auth0-editprofile-widget.min.js"></script>
 
 <script type="text/javascript">
-
-var editProfileWidget = new Auth0EditProfileWidget('editProfileContainer',{domain: 'igshi.eu.auth0.com'}, [
-                                                   [
+var editProfileWidget = new Auth0EditProfileWidget('editProfileContainer', { domain: auth_domain }, [
+   
     { label: "Ethereum Address", type:"text", attribute:"bio" }
+    ]
 
-      ]
-    }
-]);
+);
 
 editProfileWidget.init(user_token);
 
