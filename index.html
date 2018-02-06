@@ -12,80 +12,21 @@
       <h1>Edit Profile</h1>
 
       <div id="saved" class="hidden">The changes were saved.</div>
+<div id="editProfileContainer"></div>
 
-      <div id="editProfileContainer"></div>
+<script src="build/auth0-editprofile-widget.min.js"></script>
 
-      <script src="https://cdn.auth0.com/js/lock/10.5/lock.min.js"></script>
-      <script src="build/auth0-editprofile-widget.js"></script>
-      <script type="text/javascript">
+<script type="text/javascript">
 
-        var domain = 'igshi.eu.auth0.com';
-        var cid = 'BfmSx789BjAikXZkAyA8CK6Eq5HaY2SC';
-        
-        var widget = new Auth0Lock(cid, domain, {closable:false});
+var editProfileWidget = new Auth0EditProfileWidget('igshi.eu.auth0.com', 'editProfileContainer', [
+    { label: "Ethereum Address", type:"text", attribute:"bio" }
 
-        var editProfileWidget = new Auth0EditProfileWidget(domain, 'editProfileContainer', 
-              [
-                { label: "Ethereum Address", type:"textarea", attribute:"bio",
-                  onChange: function(value){ 
-                    
-                    console.log('Ethereum Address changed:', value);
+      ]
+    }
+]);
 
-                  }
-                }
-              ]);
+editProfileWidget.init(user_token);
 
-        widget.on("authenticated", function(authResult) {
-
-            function showLoggedIn() {
-              var profile = JSON.parse(localStorage.getItem('profile'));
-              var userInfoElement = document.getElementById('user-info');
-
-              userInfoElement.innerHTML += '<img src="'+profile.picture+'" />';
-              userInfoElement.innerHTML += '<span class="name">'+ profile.nickname +'</span>';
-
-              editProfileWidget
-                  .on('loading', function() {
-                    console.log('loading')
-                  })
-                  .on('loaded', function(data) {
-                    console.log('loaded', data)
-                  })
-                  .on('submit', function(data) {
-                    console.log('submited', data)
-                  })
-                  .on('save', function(data){
-                    console.log('saved', data);
-                    document.getElementById('saved').className = "";
-                    setTimeout(function(){
-                      document.getElementById('saved').className = "hidden";
-                    }, 3000);
-                  })
-                  .on('error', function(data){
-                    console.log('error', data);
-                  })
-                  .init(localStorage.getItem('idToken'));
-
-
-            }
-            
-            widget.getProfile(authResult.idToken, function(error, profile) {
-
-              localStorage.setItem('idToken', authResult.idToken);
-              localStorage.setItem('profile', JSON.stringify(profile));
-
-              var token = localStorage.getItem('idToken');
-
-              if (token) {
-                showLoggedIn();
-                widget.hide();
-              }
-
-            });
-          });
-
-          widget.show();
-
-      </script>
+</script>
     </body>
 </html>
