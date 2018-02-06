@@ -9,13 +9,13 @@
         <div id="user-info"></div>
       </header>
 
-      <h1>Edit Profile</h1>
+      <h1>てぃなコインを受け取るEthereumアドレスを入力してください。</h1>
 
       <div id="saved" class="hidden">The changes were saved.</div>
 <div id="editProfileContainer"></div>
+        
 <script src="https://cdn.auth0.com/js/lock/10.5/lock.min.js"></script>
-<script src="build/auth0-editprofile-widget.min.js"></script>
-
+<script src="build/auth0-editprofile-widget.js"></script>
 <script type="text/javascript">
     
 var widget = new Auth0Lock('BfmSx789BjAikXZkAyA8CK6Eq5HaY2SC', 'igshi.eu.auth0.com', {closable:false});
@@ -30,7 +30,6 @@ var editProfileWidget = new Auth0EditProfileWidget('editProfileContainer', { dom
 
 );
 
-    
     
         widget.on("authenticated", function(authResult) {
             function showLoggedIn() {
@@ -72,7 +71,6 @@ var editProfileWidget = new Auth0EditProfileWidget('editProfileContainer', { dom
             });
           });
           widget.show();
-
-</script>
+      </script>
     </body>
 </html>
