@@ -18,13 +18,58 @@
 
 <script type="text/javascript">
 var editProfileWidget = new Auth0EditProfileWidget('editProfileContainer', { domain: 'igshi.eu.auth0.com' }, [
-   
-    { label: "Ethereum Address", type:"text", attribute:"color" }
+                    { label: "Ethereum address", type:"textarea", attribute:"bio",
+                  onChange: function(value){ 
+                    
+                    console.log('Ethereum address:', value);
+                  }
+                }
     ]
 
 );
 
-editProfileWidget.init(user_token);
+    
+    
+        widget.on("authenticated", function(authResult) {
+            function showLoggedIn() {
+              var profile = JSON.parse(localStorage.getItem('profile'));
+              var userInfoElement = document.getElementById('user-info');
+              userInfoElement.innerHTML += '<img src="'+profile.picture+'" />';
+              userInfoElement.innerHTML += '<span class="name">'+ profile.nickname +'</span>';
+              editProfileWidget
+                  .on('loading', function() {
+                    console.log('loading')
+                  })
+                  .on('loaded', function(data) {
+                    console.log('loaded', data)
+                  })
+                  .on('submit', function(data) {
+                    console.log('submited', data)
+                  })
+                  .on('save', function(data){
+                    console.log('saved', data);
+                    document.getElementById('saved').className = "";
+                    setTimeout(function(){
+                      document.getElementById('saved').className = "hidden";
+                    }, 3000);
+                  })
+                  .on('error', function(data){
+                    console.log('error', data);
+                  })
+                  .init(localStorage.getItem('idToken'));
+            }
+            
+            widget.getProfile(authResult.idToken, function(error, profile) {
+              localStorage.setItem('idToken', authResult.idToken);
+              localStorage.setItem('profile', JSON.stringify(profile));
+              var token = localStorage.getItem('idToken');
+              if (token) {
+                showLoggedIn();
+                widget.hide();
+              }
+            });
+          });
+          widget.show();
 
 </script>
     </body>
