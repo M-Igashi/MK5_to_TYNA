@@ -9,34 +9,54 @@
         <div id="user-info"></div>
       </header>
 
-      <h1>てぃなコインを受け取るEthereumアドレスを入力してください。</h1>
+      <h1>Edit Profile</h1>
 
       <div id="saved" class="hidden">The changes were saved.</div>
-<div id="editProfileContainer"></div>
+
+      <div id="editProfileContainer"></div>
+
+      <script src="https://cdn.auth0.com/js/lock/10.5/lock.min.js"></script>
+      <script src="build/auth0-editprofile-widget.js"></script>
+      <script type="text/javascript">
+
+        var domain = 'igshi.eu.auth0.com';
+        var cid = 'BfmSx789BjAikXZkAyA8CK6Eq5HaY2SC';
         
-<script src="https://cdn.auth0.com/js/lock/10.5/lock.min.js"></script>
-<script src="build/auth0-editprofile-widget.js"></script>
-<script type="text/javascript">
-    
-var widget = new Auth0Lock('BfmSx789BjAikXZkAyA8CK6Eq5HaY2SC', 'igshi.eu.auth0.com', {closable:false});
-var editProfileWidget = new Auth0EditProfileWidget('editProfileContainer', { domain: 'igshi.eu.auth0.com' }, [
-                    { label: "Ethereum address", type:"textarea", attribute:"bio",
+        var widget = new Auth0Lock(cid, domain, {closable:false});
+
+        var editProfileWidget = new Auth0EditProfileWidget('editProfileContainer', 
+              {
+                domain: domain
+                //connection_strategy: new WebtaskStrategy({ endpoint: 'https://webtask.it.auth0.com/api/run/wt-5491169046745-0/update_user_profile?webtask_no_cache=1' })
+              },
+              [
+                { id:"customName", type:"custom", attribute:"name", render: function(data) {
+
+                  var value = data.value || "";
+
+                  if ( value === "" ) return null;
+                  
+                  return '<div class="custom-field">Hi <b>'+value+'</b>, How you doing?</div>';
+
+                } },
+                { label: "Ethereum address", type:"textarea", attribute:"bio",
                   onChange: function(value){ 
                     
-                    console.log('Ethereum address:', value);
+                    console.log('Ethereum address changed:', value);
+
                   }
                 }
-    ]
+              ]);
 
-);
-
-    
         widget.on("authenticated", function(authResult) {
+
             function showLoggedIn() {
               var profile = JSON.parse(localStorage.getItem('profile'));
               var userInfoElement = document.getElementById('user-info');
+
               userInfoElement.innerHTML += '<img src="'+profile.picture+'" />';
               userInfoElement.innerHTML += '<span class="name">'+ profile.nickname +'</span>';
+
               editProfileWidget
                   .on('loading', function() {
                     console.log('loading')
@@ -58,19 +78,27 @@ var editProfileWidget = new Auth0EditProfileWidget('editProfileContainer', { dom
                     console.log('error', data);
                   })
                   .init(localStorage.getItem('idToken'));
+
+
             }
             
             widget.getProfile(authResult.idToken, function(error, profile) {
+
               localStorage.setItem('idToken', authResult.idToken);
               localStorage.setItem('profile', JSON.stringify(profile));
+
               var token = localStorage.getItem('idToken');
+
               if (token) {
                 showLoggedIn();
                 widget.hide();
               }
+
             });
           });
+
           widget.show();
+
       </script>
     </body>
 </html>
