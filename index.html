@@ -51,7 +51,7 @@
         widget.on("authenticated", function(authResult) {
 
             function showLoggedIn() {
-              var profile = JSON.parse(localStorage.getItem('profile'));
+              //var profile = JSON.parse(localStorage.getItem('profile'));
               var userInfoElement = document.getElementById('user-info');
 
               userInfoElement.innerHTML += '<img src="'+profile.picture+'" />';
